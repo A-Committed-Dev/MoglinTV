@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+  <title>Sad Face</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #a52020; }
+
+    .face {
+      width: 100vw; height: 100vh;
+      background: radial-gradient(ellipse at 50% 45%, #b22222 0%, #8b1a1a 80%, #6b0f0f 100%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+
+    /* Eyes - droopy */
+    .eyes {
+      position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 12vw;
+    }
+    .eye {
+      width: 10vw; height: 10vw; background: #000;
+      border-radius: 50% 50% 45% 45% / 55% 55% 35% 35%;
+      position: relative; overflow: hidden;
+    }
+    .eyelid {
+      position: absolute; top: 0; left: -2px; right: -2px; height: 100%;
+      background: #8b1a1a; border-radius: 50%;
+      transform: translateY(-100%); transition: transform 0.15s ease; z-index: 2;
+    }
+    /* Half-closed look */
+    .eye-droop {
+      position: absolute; top: 0; left: -2px; right: -2px; height: 35%;
+      background: #8b1a1a; border-radius: 0 0 50% 50%;
+      z-index: 1;
+    }
+    .pupil-wrapper {
+      width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pupil {
+      width: 4vw; height: 4.5vw; background: #fff; border-radius: 50%;
+      position: relative; transition: transform 0.08s ease-out;
+      transform: translateY(0.5vw); /* looking down */
+    }
+
+    /* Nose */
+    .nose {
+      position: absolute; top: 48%; left: 50%; transform: translateX(-50%);
+      width: 4.5vw; height: 3vw; z-index: 3;
+    }
+    .nose-shape { width: 100%; height: 100%; }
+    .nose-shape svg { width: 100%; height: 100%; display: block; }
+
+    /* Mouth - sad frown with lips */
+    .mouth {
+      position: absolute; top: 56%; left: 50%; transform: translateX(-50%);
+      width: 18vw; height: 12vw; overflow: visible;
+    }
+    .mouth-outer {
+      width: 100%; height: 6vw; background: #650017;
+      border-radius: 50% 50% 5% 5% / 100% 100% 5% 5%; border: 8px solid #31000b;
+      position: relative; overflow: hidden;
+    }
+    .lip-mask {
+      position: absolute; top: -1.5vw; left: -3vw;
+      width: calc(100% + 6vw); height: 5vw;
+      background: radial-gradient(ellipse at 50% 45%, #b22222 0%, #8b1a1a 80%, #6b0f0f 100%);
+      background-size: 100vw 100vh;
+      background-position: -38vw calc(-56vh + 1.5vw);
+      clip-path: url(#lipClip);
+      z-index: 2;
+    }
+    .mouth-curve {
+      position: absolute; top: -1.5vw; left: -3vw; right: -3vw;
+      width: calc(100% + 6vw); height: 5vw; z-index: 3;
+    }
+    .mouth-curve svg { width: 100%; height: 100%; display: block; }
+
+    /* Tear */
+    .tear {
+      position: absolute; z-index: 5;
+      width: 2vw; height: 3vw;
+      background: radial-gradient(ellipse at 50% 30%, rgba(100,180,255,0.8) 0%, rgba(60,140,220,0.6) 100%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: tearDrop 3s ease-in infinite;
+    }
+    .tear-left { top: 40%; left: 30%; animation-delay: 0s; }
+    .tear-right { top: 40%; right: 30%; animation-delay: 1.5s; }
+
+    @keyframes tearDrop {
+      0% { opacity: 0; transform: translateY(0); }
+      10% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(15vw); }
+    }
+  </style>
+</head>
+<body>
+  <div class="face">
+    <!-- Tears -->
+    <div class="tear tear-left"></div>
+    <div class="tear tear-right"></div>
+
+    <!-- Eyes -->
+    <div class="eyes">
+      <div class="eye" id="leftEye">
+        <div class="eye-droop"></div>
+        <div class="eyelid" id="leftEyelid"></div>
+        <div class="pupil-wrapper"><div class="pupil" id="leftPupil"></div></div>
+      </div>
+      <div class="eye" id="rightEye">
+        <div class="eye-droop"></div>
+        <div class="eyelid" id="rightEyelid"></div>
+        <div class="pupil-wrapper"><div class="pupil" id="rightPupil"></div></div>
+      </div>
+    </div>
+
+    <!-- Nose -->
+    <div class="nose">
+      <div class="nose-shape">
+        <svg viewBox="-5 -5 70 60" preserveAspectRatio="xMidYMid meet" overflow="visible">
+          <polygon points="30,44 56,4 4,4" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="25" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Mouth - sad frown with lips -->
+    <div class="mouth">
+      <div class="mouth-outer"></div>
+      <svg width="0" height="0" style="position: absolute;">
+        <defs>
+          <clipPath id="lipClip" clipPathUnits="objectBoundingBox">
+            <path d="M0.0417,0.0857 L0.025,0.2571 Q0.025,0.9 0.2583,0.9 Q0.375,0.9 0.5,0.5286 Q0.625,0.9 0.7417,0.9 Q0.975,0.9 0.975,0.2571 L0.9583,0.0857 L0.9583,0 L0.0417,0 Z"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <div class="lip-mask"></div>
+      <div class="mouth-curve">
+        <svg viewBox="-20 -25 240 70" preserveAspectRatio="none">
+          <path d="M-10,-19 L-14,-7 Q-14,38 42,38 Q70,38 100,12 Q130,38 158,38 Q214,38 214,-7 L210,-19" fill="none" stroke="#31000b" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leftPupil = document.getElementById('leftPupil');
+    const rightPupil = document.getElementById('rightPupil');
+    const leftEyelid = document.getElementById('leftEyelid');
+    const rightEyelid = document.getElementById('rightEyelid');
+    const leftEye = document.getElementById('leftEye');
+    const rightEye = document.getElementById('rightEye');
+
+    document.addEventListener('mousemove', (e) => {
+      [{ el: leftPupil, parent: leftEye }, { el: rightPupil, parent: rightEye }].forEach(({ el, parent }) => {
+        const rect = parent.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx, dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxMove = rect.width * 0.18, ratio = Math.min(dist / 300, 1);
+        el.style.transform = `translate(${(dx / dist) * maxMove * ratio}px, ${(dy / dist) * maxMove * ratio + 5}px)`;
+      });
+    });
+
+    function blink() {
+      leftEyelid.style.transform = 'translateY(0%)';
+      rightEyelid.style.transform = 'translateY(0%)';
+      setTimeout(() => {
+        leftEyelid.style.transform = 'translateY(-100%)';
+        rightEyelid.style.transform = 'translateY(-100%)';
+      }, 200);
+      setTimeout(blink, 3000 + Math.random() * 3000);
+    }
+    setTimeout(blink, 2000);
+  </script>
+</body>
+</html>

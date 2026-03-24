@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+  <title>Dizzy Face</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #a52020; }
+
+    .face {
+      width: 100vw; height: 100vh;
+      background: radial-gradient(ellipse at 50% 45%, #b22222 0%, #8b1a1a 80%, #6b0f0f 100%);
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+
+    /* Eyes with spiral pupils */
+    .eyes {
+      position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 12vw;
+    }
+    .eye {
+      width: 10vw; height: 10vw; background: #000;
+      border-radius: 50% 50% 45% 45% / 55% 55% 35% 35%;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .spiral {
+      width: 7vw; height: 7vw;
+      animation: spin 1s linear infinite;
+    }
+    .spiral svg { width: 100%; height: 100%; }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .eyelid {
+      position: absolute; top: 0; left: -2px; right: -2px; height: 100%;
+      background: #8b1a1a; border-radius: 50%;
+      transform: translateY(-100%); transition: transform 0.15s ease; z-index: 2;
+    }
+
+    /* Nose */
+    .nose {
+      position: absolute; top: 48%; left: 50%; transform: translateX(-50%);
+      width: 4.5vw; height: 3vw; z-index: 3;
+    }
+    .nose-shape { width: 100%; height: 100%; }
+    .nose-shape svg { width: 100%; height: 100%; display: block; }
+
+    /* Mouth */
+    .mouth {
+      position: absolute; top: 56%; left: 50%; transform: translateX(-50%);
+      width: 18vw; height: 12vw; overflow: visible;
+    }
+    .mouth-outer {
+      width: 100%; height: 100%; background: #650017;
+      border-radius: 5% 5% 50% 50%; border: 8px solid #31000b;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s ease; transform-origin: center top;
+    }
+    .lip-mask {
+      position: absolute; top: -1.5vw; left: -3vw;
+      width: calc(100% + 6vw); height: 5vw;
+      background: radial-gradient(ellipse at 50% 45%, #b22222 0%, #8b1a1a 80%, #6b0f0f 100%);
+      background-size: 100vw 100vh;
+      background-position: -38vw calc(-56vh + 1.5vw);
+      clip-path: url(#lipClip);
+      z-index: 2;
+    }
+    .mouth-curve {
+      position: absolute; top: -1.5vw; left: -3vw; right: -3vw;
+      width: calc(100% + 6vw); height: 5vw; z-index: 3;
+    }
+    .mouth-curve svg { width: 100%; height: 100%; display: block; }
+    .tongue {
+      position: absolute; bottom: -15%; left: 50%; transform: translateX(-50%);
+      width: 55%; height: 60%;
+      background: radial-gradient(ellipse at 50% 30%, #e87a8a 0%, #c4576a 80%);
+      border-radius: 50%;
+    }
+
+    /* Slight wobble for dizzy effect */
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      75% { transform: rotate(-2deg); }
+    }
+    .face { animation: wobble 2s ease-in-out infinite; }
+
+    /* Stars around head */
+    .star {
+      position: absolute; z-index: 10; font-size: 3vw;
+      color: #ffd700; animation: orbit 3s linear infinite;
+    }
+    .star:nth-child(1) { animation-delay: 0s; }
+    .star:nth-child(2) { animation-delay: -1s; }
+    .star:nth-child(3) { animation-delay: -2s; }
+
+    @keyframes orbit {
+      0% { top: 8%; left: 50%; transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      25% { top: 15%; left: 70%; transform: translate(-50%, -50%) scale(0.7); opacity: 0.8; }
+      50% { top: 8%; left: 80%; transform: translate(-50%, -50%) scale(0.5); opacity: 0.5; }
+      75% { top: 2%; left: 70%; transform: translate(-50%, -50%) scale(0.7); opacity: 0.8; }
+      100% { top: 8%; left: 50%; transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="face">
+    <!-- Stars orbiting head -->
+    <div class="star">&#9733;</div>
+    <div class="star">&#9733;</div>
+    <div class="star">&#9733;</div>
+
+    <!-- Eyes with spinning spirals -->
+    <div class="eyes">
+      <div class="eye" id="leftEye">
+        <div class="eyelid" id="leftEyelid"></div>
+        <div class="spiral">
+          <svg viewBox="0 0 100 100">
+            <path d="M50,50 C50,40 60,35 65,42 C70,49 62,58 53,55 C44,52 40,42 47,35 C54,28 67,32 70,43 C73,54 63,65 50,63 C37,61 30,48 35,37 C40,26 55,22 65,30 C75,38 78,55 68,65 C58,75 38,72 30,60" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="eye" id="rightEye">
+        <div class="eyelid" id="rightEyelid"></div>
+        <div class="spiral">
+          <svg viewBox="0 0 100 100">
+            <path d="M50,50 C50,40 60,35 65,42 C70,49 62,58 53,55 C44,52 40,42 47,35 C54,28 67,32 70,43 C73,54 63,65 50,63 C37,61 30,48 35,37 C40,26 55,22 65,30 C75,38 78,55 68,65 C58,75 38,72 30,60" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nose -->
+    <div class="nose">
+      <div class="nose-shape">
+        <svg viewBox="-5 -5 70 60" preserveAspectRatio="xMidYMid meet" overflow="visible">
+          <polygon points="30,44 56,4 4,4" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="25" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Mouth -->
+    <div class="mouth">
+      <div class="mouth-outer">
+        <div class="tongue"></div>
+      </div>
+      <svg width="0" height="0" style="position: absolute;">
+        <defs>
+          <clipPath id="lipClip" clipPathUnits="objectBoundingBox">
+            <path d="M0.0417,0.0857 L0.025,0.2571 Q0.025,0.9 0.2583,0.9 Q0.375,0.9 0.5,0.5286 Q0.625,0.9 0.7417,0.9 Q0.975,0.9 0.975,0.2571 L0.9583,0.0857 L0.9583,0 L0.0417,0 Z"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <div class="lip-mask"></div>
+      <div class="mouth-curve">
+        <svg viewBox="-20 -25 240 70" preserveAspectRatio="none">
+          <path d="M-10,-19 L-14,-7 Q-14,38 42,38 Q70,38 100,12 Q130,38 158,38 Q214,38 214,-7 L210,-19" fill="none" stroke="#31000b" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const leftEyelid = document.getElementById('leftEyelid');
+    const rightEyelid = document.getElementById('rightEyelid');
+
+    // Blinking
+    function blink() {
+      leftEyelid.style.transform = 'translateY(0%)';
+      rightEyelid.style.transform = 'translateY(0%)';
+      setTimeout(() => {
+        leftEyelid.style.transform = 'translateY(-100%)';
+        rightEyelid.style.transform = 'translateY(-100%)';
+      }, 150);
+      const next = 3000 + Math.random() * 4000;
+      setTimeout(blink, next);
+    }
+    setTimeout(blink, 3000);
+  </script>
+</body>
+</html>

@@ -18,6 +18,7 @@
     .eyes {
       position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
       display: flex; gap: 12vw;
+      animation: yellShake 3s ease-in-out infinite;
     }
     .eye {
       width: 10vw; height: 10vw; background: #000;
@@ -31,37 +32,49 @@
     }
     .eye-droop {
       position: absolute; top: 0; left: -2px; right: -2px;
-      height: 40%; background: #8b1a1a; z-index: 1;
+      height: 50%; background: #8b1a1a; z-index: 1;
       border-radius: 0 0 30% 30%;
     }
-    .left-eye .eye-droop { transform: rotate(8deg); transform-origin: right top; }
-    .right-eye .eye-droop { transform: rotate(-8deg); transform-origin: left top; }
+    .left-eye .eye-droop { transform: rotate(12deg); transform-origin: right top; }
+    .right-eye .eye-droop { transform: rotate(-12deg); transform-origin: left top; }
     .pupil-wrapper {
       width: 100%; height: 100%; position: absolute; top: 0; left: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .pupil {
-      width: 4vw; height: 4.5vw; background: #fff; border-radius: 50%;
+      width: 2.8vw; height: 3.2vw; background: #fff; border-radius: 50%;
       position: relative; transition: transform 0.08s ease-out;
     }
+    .left-eye .pupil { transform: translateX(0.8vw); }
+    .right-eye .pupil { transform: translateX(-0.8vw); }
 
     /* Nose */
     .nose {
       position: absolute; top: 48%; left: 50%; transform: translateX(-50%);
       width: 4.5vw; height: 3vw; z-index: 3;
+      animation: yellShake 3s ease-in-out infinite;
     }
     .nose-shape { width: 100%; height: 100%; }
     .nose-shape svg { width: 100%; height: 100%; display: block; }
 
-    /* Mouth - frowning */
+    /* Mouth - angry clenched */
     .mouth {
       position: absolute; top: 56%; left: 50%; transform: translateX(-50%);
       width: 18vw; height: 12vw; overflow: visible;
+      animation: yellShake 3s ease-in-out infinite;
     }
     .mouth-outer {
-      width: 100%; height: 100%; background: #650017;
+      width: 100%; height: 35%; background: #650017;
       border-radius: 5% 5% 50% 50%; border: 8px solid #31000b;
       position: relative; overflow: hidden;
+      margin-top: 0.2vw;
+      animation: yell 3s ease-in-out infinite;
+    }
+    .tongue {
+      position: absolute; bottom: -15%; left: 50%; transform: translateX(-50%);
+      width: 55%; height: 60%;
+      background: radial-gradient(ellipse at 50% 30%, #e87a8a 0%, #c4576a 80%);
+      border-radius: 50%;
     }
     .lip-mask {
       position: absolute; top: -1.5vw; left: -3vw;
@@ -78,20 +91,51 @@
     }
     .mouth-curve svg { width: 100%; height: 100%; display: block; }
 
-    /* Anger veins */
-    .vein {
-      position: absolute; z-index: 5;
+    /* Anime anger vein */
+    .anger-vein {
+      position: absolute; top: 18%; right: 20%; z-index: 5;
+      width: 5vw; height: 5vw;
+      animation: veinThrob 0.8s ease-in-out infinite;
+      transform: rotate(45deg);
     }
-    .vein svg { width: 100%; height: 100%; }
-    .vein-tl { top: 8%; right: 15%; width: 8vw; height: 8vw; }
+    .anger-vein svg { width: 100%; height: 100%; }
+    @keyframes veinThrob {
+      0%, 100% { transform: rotate(45deg) scale(1); }
+      50% { transform: rotate(45deg) scale(1.3); }
+    }
+
+    @keyframes yell {
+      0%, 70%, 100% { height: 35%; }
+      80%, 90% { height: 100%; }
+    }
+
+    @keyframes yellShake {
+      0%, 70% { transform: translateX(-50%); }
+      80% { transform: translateX(calc(-50% + 0.3vw)); }
+      81% { transform: translateX(calc(-50% - 0.25vw)); }
+      82% { transform: translateX(calc(-50% + 0.2vw)); }
+      83% { transform: translateX(calc(-50% - 0.3vw)); }
+      84% { transform: translateX(calc(-50% + 0.15vw)); }
+      85% { transform: translateX(calc(-50% - 0.2vw)); }
+      86% { transform: translateX(calc(-50% + 0.25vw)); }
+      87% { transform: translateX(calc(-50% - 0.15vw)); }
+      88% { transform: translateX(calc(-50% + 0.3vw)); }
+      89% { transform: translateX(calc(-50% - 0.2vw)); }
+      90%, 100% { transform: translateX(-50%); }
+    }
+
   </style>
 </head>
 <body>
   <div class="face">
-    <!-- Anger vein -->
-    <div class="vein vein-tl">
-      <svg viewBox="0 0 50 50">
-        <path d="M25,10 L25,25 M15,15 L25,25 M35,15 L25,25 M25,25 L25,40" stroke="#d44" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Anime anger vein -->
+    <div class="anger-vein">
+      <svg viewBox="0 0 40 40">
+        <!-- Classic anime anger mark: four L-shaped hooks -->
+        <path d="M5,16 L16,16 L16,5" fill="none" stroke="#c33" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M24,5 L24,16 L35,16" fill="none" stroke="#c33" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M35,24 L24,24 L24,35" fill="none" stroke="#c33" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16,35 L16,24 L5,24" fill="none" stroke="#c33" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
@@ -118,9 +162,11 @@
       </div>
     </div>
 
-    <!-- Mouth - angry frown -->
+    <!-- Mouth - angry clenched -->
     <div class="mouth">
-      <div class="mouth-outer"></div>
+      <div class="mouth-outer">
+        <div class="tongue"></div>
+      </div>
       <svg width="0" height="0" style="position: absolute;">
         <defs>
           <clipPath id="lipClip" clipPathUnits="objectBoundingBox">
@@ -138,23 +184,8 @@
   </div>
 
   <script>
-    const leftPupil = document.getElementById('leftPupil');
-    const rightPupil = document.getElementById('rightPupil');
     const leftEyelid = document.getElementById('leftEyelid');
     const rightEyelid = document.getElementById('rightEyelid');
-    const leftEye = document.getElementById('leftEye');
-    const rightEye = document.getElementById('rightEye');
-
-    document.addEventListener('mousemove', (e) => {
-      [{ el: leftPupil, parent: leftEye }, { el: rightPupil, parent: rightEye }].forEach(({ el, parent }) => {
-        const rect = parent.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx, dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxMove = rect.width * 0.18, ratio = Math.min(dist / 300, 1);
-        el.style.transform = `translate(${(dx / dist) * maxMove * ratio}px, ${(dy / dist) * maxMove * ratio}px)`;
-      });
-    });
 
     function blink() {
       leftEyelid.style.transform = 'translateY(0%)';

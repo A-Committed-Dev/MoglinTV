@@ -59,6 +59,12 @@
       position: relative; overflow: hidden;
       margin: 0 auto;
     }
+    .tongue {
+      position: absolute; bottom: -15%; left: 50%; transform: translateX(-50%);
+      width: 55%; height: 60%;
+      background: radial-gradient(ellipse at 50% 30%, #e87a8a 0%, #c4576a 80%);
+      border-radius: 50%;
+    }
     .lip-mask {
       position: absolute; top: -1.5vw; left: -3vw;
       width: calc(100% + 6vw); height: 5vw;
@@ -116,7 +122,9 @@
 
     <!-- Mouth - confused with lips -->
     <div class="mouth">
-      <div class="mouth-outer"></div>
+      <div class="mouth-outer">
+        <div class="tongue"></div>
+      </div>
       <svg width="0" height="0" style="position: absolute;">
         <defs>
           <clipPath id="lipClip" clipPathUnits="objectBoundingBox">
@@ -134,23 +142,10 @@
   </div>
 
   <script>
-    const leftPupil = document.getElementById('leftPupil');
-    const rightPupil = document.getElementById('rightPupil');
     const leftEyelid = document.getElementById('leftEyelid');
     const rightEyelid = document.getElementById('rightEyelid');
-    const leftEye = document.getElementById('leftEye');
-    const rightEye = document.getElementById('rightEye');
-
-    document.addEventListener('mousemove', (e) => {
-      [{ el: leftPupil, parent: leftEye }, { el: rightPupil, parent: rightEye }].forEach(({ el, parent }) => {
-        const rect = parent.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx, dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxMove = rect.width * 0.18, ratio = Math.min(dist / 300, 1);
-        el.style.transform = `translate(${(dx / dist) * maxMove * ratio}px, ${(dy / dist) * maxMove * ratio}px)`;
-      });
-    });
+  
+    
 
     function blink() {
       leftEyelid.style.transform = 'translateY(0%)';

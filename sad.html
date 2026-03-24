@@ -41,8 +41,17 @@
     }
     .pupil {
       width: 4vw; height: 4.5vw; background: #fff; border-radius: 50%;
-      position: relative; transition: transform 0.08s ease-out;
-      transform: translateY(0.5vw); /* looking down */
+      position: relative; transform: translateY(2.5vw);
+      animation: pupilPulse 2s ease-in-out infinite;
+    }
+    .eye {
+      width: 10vw; height: 10vw; background: #000;
+      border-radius: 50% 50% 45% 45% / 55% 55% 35% 35%;
+      position: relative; overflow: hidden;
+    }
+    @keyframes pupilPulse {
+      0%, 100% { width: 4vw; height: 4.5vw; }
+      50% { width: 3.8vw; height: 4vw; }
     }
 
     /* Nose */
@@ -57,11 +66,6 @@
     .mouth {
       position: absolute; top: 56%; left: 50%; transform: translateX(-50%);
       width: 18vw; height: 12vw; overflow: visible;
-    }
-    .mouth-outer {
-      width: 100%; height: 6vw; background: #650017;
-      border-radius: 50% 50% 5% 5% / 100% 100% 5% 5%; border: 8px solid #31000b;
-      position: relative; overflow: hidden;
     }
     .lip-mask {
       position: absolute; top: -1.5vw; left: -3vw;
@@ -128,7 +132,6 @@
 
     <!-- Mouth - sad frown with lips -->
     <div class="mouth">
-      <div class="mouth-outer"></div>
       <svg width="0" height="0" style="position: absolute;">
         <defs>
           <clipPath id="lipClip" clipPathUnits="objectBoundingBox">
@@ -146,23 +149,8 @@
   </div>
 
   <script>
-    const leftPupil = document.getElementById('leftPupil');
-    const rightPupil = document.getElementById('rightPupil');
     const leftEyelid = document.getElementById('leftEyelid');
     const rightEyelid = document.getElementById('rightEyelid');
-    const leftEye = document.getElementById('leftEye');
-    const rightEye = document.getElementById('rightEye');
-
-    document.addEventListener('mousemove', (e) => {
-      [{ el: leftPupil, parent: leftEye }, { el: rightPupil, parent: rightEye }].forEach(({ el, parent }) => {
-        const rect = parent.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx, dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const maxMove = rect.width * 0.18, ratio = Math.min(dist / 300, 1);
-        el.style.transform = `translate(${(dx / dist) * maxMove * ratio}px, ${(dy / dist) * maxMove * ratio + 5}px)`;
-      });
-    });
 
     function blink() {
       leftEyelid.style.transform = 'translateY(0%)';

@@ -92,6 +92,12 @@
       0% { transform: translateY(0) rotate(-5deg); }
       100% { transform: translateY(-1vw) rotate(5deg); }
     }
+
+    /* Head tilt */
+    .head {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      transition: transform 1.5s ease-in-out;
+    }
   </style>
 </head>
 <body>
@@ -99,6 +105,7 @@
     <!-- Question mark -->
     <div class="question">?</div>
 
+    <div class="head">
     <!-- Eyes -->
     <div class="eyes">
       <div class="eye" id="leftEye">
@@ -139,6 +146,7 @@
         </svg>
       </div>
     </div>
+    </div>
   </div>
 
   <script>
@@ -157,6 +165,17 @@
       setTimeout(blink, 3000 + Math.random() * 4000);
     }
     setTimeout(blink, 2500);
+
+    // Head tilt
+    const head = document.querySelector('.head');
+    let tilted = false;
+    function tiltHead() {
+      tilted = !tilted;
+      head.style.transform = tilted ? 'rotate(8deg)' : 'rotate(0deg)';
+      const wait = 10000 + Math.random() * 10000;
+      setTimeout(tiltHead, wait);
+    }
+    setTimeout(tiltHead, 10000 + Math.random() * 10000);
   </script>
 </body>
 </html>

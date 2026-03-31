@@ -1,0 +1,6 @@
+adafruit-blinka==8.43.0
+adafruit-circuitpython-ads1x15==2.2.23
+gpiod==2.2.2
+rpi-hardware-pwm
+gpiozero
+lgpio

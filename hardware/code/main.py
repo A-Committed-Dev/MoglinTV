@@ -15,9 +15,9 @@ Wiring:
     - GND -> GND
 
   ADXL335 -> ADS1115:
-    - X-axis -> ADS1115 A0
+    - X-axis -> ADS1115 A2
     - Y-axis -> ADS1115 A1
-    - Z-axis -> ADS1115 A2
+    - Z-axis -> ADS1115 A0
     - VCC    -> 5V
     - GND    -> GND
 
@@ -28,7 +28,7 @@ Prerequisites:
 """
 
 from servo import Servo
-from acceleromter import Accelerometer
+from accelerometer import Accelerometer
 
 
 def main() -> None:
@@ -41,7 +41,7 @@ def main() -> None:
     try:
         while True:
             x, y, z = accelerometer.read()
-            print(f"Accelerometer readings: X={x:.3f} V, Y={y:.3f} V, Z={z:.3f} V")
+            print(f"Acceleration (g): X={x:.2f}g, Y={y:.2f}g, Z={z:.2f}g")
             # Example: Move servo to 45° over 2 seconds
             servo.move_to_angle(45, duration_s=2)
             servo.move_to_angle(0, duration_s=2)

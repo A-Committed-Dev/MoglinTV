@@ -33,6 +33,7 @@ class Servo:
     
     def move_to_angle(self, degrees: float, duration_s: float) -> None:
         """Move to target angle over specified duration."""
+        degrees = max(-90, min(90, degrees))
         steps = int(duration_s * self.SERVO_HZ)
         current_duty = self.pwm.duty_cycle
         target_pulse_us = self.MIN_PULSE_US + (degrees + 90) / 180 * (self.MAX_PULSE_US - self.MIN_PULSE_US)

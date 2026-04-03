@@ -1,8 +1,0 @@
-services:
-  hardware:
-    build: .
-    privileged: true
-    restart: no
-    volumes:
-      - "/dev:/dev"
-      - "/sys:/sys"

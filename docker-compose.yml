@@ -1,0 +1,16 @@
+services:
+  hardware:
+    build: ./hardware
+    privileged: true
+    restart: no
+    depends_on:
+      - faces
+    volumes:
+      - "/dev:/dev"
+      - "/sys:/sys"
+
+  faces:
+    build: ./faces
+    restart: unless-stopped
+    ports:
+      - "5000:5000"

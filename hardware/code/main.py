@@ -31,16 +31,19 @@ from moglin import Moglin
 import requests
 
 
-def fetch_mood() -> str:
-  pass
+
 def post_mood(mood: str) -> None:
-  pass
+    try:
+        requests.post("http://faces:5000/mood", json={"mood": mood}, timeout=2)
+    except requests.RequestException:
+        pass
 
 def main() -> None:
     print("Hardware controller started.")
     moglin = Moglin()
     mood = "happy"  # Default mood  
-    
+    post_mood(mood)
+
     try:
         while True:
             match mood:
@@ -61,10 +64,14 @@ def main() -> None:
                 case "sleeping":
                     moglin.neutral()
             
+            old_mood = mood
             if moglin.shaken():
                 mood = "angry"
             elif moglin.upside_down():
                 mood = "dead"
+
+            if mood != old_mood:
+                post_mood(mood)
     finally:
         moglin.neutral()  # Ensure tail returns to neutral on exit
         

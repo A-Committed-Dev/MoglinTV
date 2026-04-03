@@ -23,10 +23,29 @@ def get_mood():
     return jsonify({"mood": current_mood})
 
 
-@app.route("/")
+@app.route("/face")
 def face():
     path = os.path.join(os.path.dirname(__file__), "templates", f"{current_mood}.html")
     return send_file(path)
+
+
+@app.route("/")
+def index():
+    return """<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>*{margin:0;padding:0}html,body,iframe{width:100%;height:100%;border:none;overflow:hidden}</style>
+</head><body>
+<iframe id="f" src="/face"></iframe>
+<script>
+let lastMood="";
+setInterval(()=>{
+  fetch("/mood").then(r=>r.json()).then(d=>{
+    if(lastMood&&d.mood!==lastMood)document.getElementById("f").src="/face?t="+Date.now();
+    lastMood=d.mood;
+  }).catch(()=>{});
+},500);
+</script>
+</body></html>"""
 
 
 if __name__ == "__main__":

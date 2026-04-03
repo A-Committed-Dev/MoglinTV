@@ -39,7 +39,7 @@ def post_mood(mood: str) -> None:
 def main() -> None:
     print("Hardware controller started.")
     moglin = Moglin()
-    mood = "happy"  
+    mood = "happy"  # Default mood  
     
     try:
         while True:

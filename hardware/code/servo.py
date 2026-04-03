@@ -32,16 +32,16 @@ class Servo:
         self.pwm.change_duty_cycle(duty_pct)
     
     def move_to_angle(self, degrees: float, duration_s: float) -> None:
-        """Move to target angle over specified duration."""
-        degrees = max(-90, min(90, degrees))
-        steps = int(duration_s * self.SERVO_HZ)
-        current_duty = self.pwm.duty_cycle
-        target_pulse_us = self.MIN_PULSE_US + (degrees + 90) / 180 * (self.MAX_PULSE_US - self.MIN_PULSE_US)
-        target_duty = target_pulse_us / self.PERIOD_US * 100
-        for step in range(1, steps + 1):
-            intermediate_duty = current_duty + (target_duty - current_duty) * step / steps
-            self.pwm.change_duty_cycle(intermediate_duty)
-            time.sleep(1 / self.SERVO_HZ)
+            """Move to target angle over specified duration."""
+            degrees = max(-90, min(90, degrees))
+            steps = int(duration_s * self.SERVO_HZ)
+            current_duty = self.pwm._duty_cycle
+            target_pulse_us = self.MIN_PULSE_US + (degrees + 90) / 180 * (self.MAX_PULSE_US - self.MIN_PULSE_US)
+            target_duty = target_pulse_us / self.PERIOD_US * 100
+            for step in range(1, steps + 1):
+                intermediate_duty = current_duty + (target_duty - current_duty) * step / steps
+                self.pwm.change_duty_cycle(intermediate_duty)
+                time.sleep(1 / self.SERVO_HZ)
     
     def start(self) -> None:
         self.pwm.start(0)

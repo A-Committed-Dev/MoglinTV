@@ -45,9 +45,11 @@ def main() -> None:
             # Example: Move servo to 45° over 2 seconds
             servo.move_to_angle(45, duration_s=2)
             servo.move_to_angle(0, duration_s=2)
-            servo.move_to_angle(-45, duration_s=2)      
+            servo.move_to_angle(-45, duration_s=2)
+            servo.move_to_angle(0, duration_s=2)      
             
     finally:
+        servo.set_servo_angle(0) 
         servo.stop()
 
 

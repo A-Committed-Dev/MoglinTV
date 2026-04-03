@@ -19,19 +19,19 @@ class Accelerometer:
     def voltage_to_g(self, v: float) -> float:
         return (v - self.ZERO_G_VOLTAGE) / self.SENSITIVITY
     
-def read(self):
-    x = self.voltage_to_g(self.x.voltage)   
-    y = self.voltage_to_g(self.y.voltage) 
-    z = self.voltage_to_g(self.z.voltage)
-    return x, y, z
+    def read(self):
+        x = self.voltage_to_g(self.x.voltage)   
+        y = self.voltage_to_g(self.y.voltage) 
+        z = self.voltage_to_g(self.z.voltage)
+        return x, y, z
 
-def shake(self, threshold: float = 1.0) -> bool:
-    x, y, z = self.read()
-    shaken = (
-        abs(x - self.prev_x) > threshold
-        or abs(y - self.prev_y) > threshold
-        or abs(z - self.prev_z) > threshold
-    )
-    self.prev_x, self.prev_y, self.prev_z = x, y, z
-    return shaken
-        
+    def shake(self, threshold: float = 1.0) -> bool:
+        x, y, z = self.read()
+        shaken = (
+            abs(x - self.prev_x) > threshold
+            or abs(y - self.prev_y) > threshold
+            or abs(z - self.prev_z) > threshold
+        )
+        self.prev_x, self.prev_y, self.prev_z = x, y, z
+        return shaken
+            

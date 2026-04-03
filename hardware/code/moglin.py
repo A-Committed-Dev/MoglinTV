@@ -16,7 +16,7 @@ class Moglin:
 
     # lower tail to show sadness
     def sad(self):
-        self.servo.move_to_angle(-45, duration_s=2)
+        self.servo.move_to_angle(-90, duration_s=2)
     
     # return tail to neutral position
     def neutral(self):

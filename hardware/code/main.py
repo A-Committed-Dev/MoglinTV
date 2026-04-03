@@ -29,6 +29,7 @@ Prerequisites:
 
 from moglin import Moglin
 import requests
+import time
 
 
 
@@ -41,14 +42,28 @@ def post_mood(mood: str) -> None:
 def main() -> None:
     print("Hardware controller started.")
     moglin = Moglin()
-    mood = "happy"  # Default mood  
+    default_mood = "happy"
+    mood = default_mood
+    mood_expires = 0
+    shake_count = 0
+    upside_down_since = 0
+    last_happy_wiggle = 0
     post_mood(mood)
+
+    def set_timed_mood(new_mood, seconds):
+        nonlocal mood, mood_expires
+        mood = new_mood
+        mood_expires = time.monotonic() + seconds
 
     try:
         while True:
             match mood:
                 case "happy":
-                    moglin.happy()
+                    if time.monotonic() - last_happy_wiggle >= 30:
+                        moglin.happy()
+                        last_happy_wiggle = time.monotonic()
+                    else:
+                        moglin.neutral()
                 case "sad":
                     moglin.sad()
                 case "angry":
@@ -65,10 +80,25 @@ def main() -> None:
                     moglin.neutral()
             
             old_mood = mood
-            if moglin.shaken():
-                mood = "angry"
+            if moglin.shaken(threshold=0.6):
+                if mood not in {"angry", "dizzy"}:
+                    shake_count += 1
+                    if shake_count >= 2:
+                        set_timed_mood("dizzy", 15)
+                        shake_count = 0
+                    else:
+                        set_timed_mood("angry", 15)
             elif moglin.upside_down():
-                mood = "dead"
+                if upside_down_since == 0:
+                    upside_down_since = time.monotonic()
+                    set_timed_mood("scared", 2)
+                elif time.monotonic() - upside_down_since >= 10:
+                    set_timed_mood("dead", 15)
+            else:
+                upside_down_since = 0
+                if mood_expires and time.monotonic() >= mood_expires:
+                    mood = default_mood
+                    mood_expires = 0
 
             if mood != old_mood:
                 post_mood(mood)

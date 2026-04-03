@@ -27,30 +27,47 @@ Prerequisites:
   Then reboot.  (Defaults: PWM2=GPIO18)
 """
 
-from servo import Servo
-from accelerometer import Accelerometer
+from moglin import Moglin
+import requests
 
+
+def fetch_mood() -> str:
+  pass
+def post_mood(mood: str) -> None:
+  pass
 
 def main() -> None:
     print("Hardware controller started.")
-    servo = Servo()
-    servo.start()
-    servo.set_servo_angle(0)  # Start at center position
-    accelerometer = Accelerometer()
-
+    moglin = Moglin()
+    mood = "happy"  
+    
     try:
         while True:
-            x, y, z = accelerometer.read()
-            print(f"Acceleration (g): X={x:.2f}g, Y={y:.2f}g, Z={z:.2f}g")
-            # Example: Move servo to 45° over 2 seconds
-            servo.move_to_angle(45, duration_s=2)
-            servo.move_to_angle(0, duration_s=2)
-            servo.move_to_angle(-45, duration_s=2)
-            servo.move_to_angle(0, duration_s=2)      
+            match mood:
+                case "happy":
+                    moglin.happy()
+                case "sad":
+                    moglin.sad()
+                case "angry":
+                    moglin.neutral()
+                case "confused":
+                    moglin.neutral()
+                case "dead":
+                    moglin.sad()
+                case "dizzy":
+                    moglin.neutral()
+                case "scared":
+                    moglin.neutral()
+                case "sleeping":
+                    moglin.neutral()
             
+            if moglin.shaken():
+                mood = "angry"
+            elif moglin.upside_down():
+                mood = "dead"
     finally:
-        servo.set_servo_angle(0) 
-        servo.stop()
+        moglin.neutral()  # Ensure tail returns to neutral on exit
+        
 
 
 if __name__ == "__main__":

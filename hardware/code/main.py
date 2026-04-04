@@ -28,9 +28,9 @@ Prerequisites:
 """
 
 from moglin import Moglin
+from utility import Timer
 import requests
 import time
-
 
 
 def post_mood(mood: str) -> None:
@@ -44,24 +44,26 @@ def main() -> None:
     moglin = Moglin()
     default_mood = "happy"
     mood = default_mood
-    mood_expires = 0
     shake_count = 0
-    upside_down_since = 0
-    last_happy_wiggle = 0
+    mood_timer = Timer()
+    upside_down_timer = Timer(10)
+    wiggle_timer = Timer(30)
+    inactivity_timer = Timer(30 * 60)
+    inactivity_timer.start()
     post_mood(mood)
 
     def set_timed_mood(new_mood, seconds):
-        nonlocal mood, mood_expires
+        nonlocal mood
         mood = new_mood
-        mood_expires = time.monotonic() + seconds
+        mood_timer.start(seconds)
 
     try:
         while True:
             match mood:
                 case "happy":
-                    if time.monotonic() - last_happy_wiggle >= 30:
+                    if wiggle_timer.expired() or not wiggle_timer.active():
                         moglin.happy()
-                        last_happy_wiggle = time.monotonic()
+                        wiggle_timer.start()
                     else:
                         moglin.neutral()
                 case "sad":
@@ -80,7 +82,9 @@ def main() -> None:
                     moglin.neutral()
             
             old_mood = mood
+            
             if moglin.shaken(threshold=0.6):
+                inactivity_timer.start()
                 if mood not in {"angry", "dizzy"}:
                     shake_count += 1
                     if shake_count >= 2:
@@ -88,17 +92,23 @@ def main() -> None:
                         shake_count = 0
                     else:
                         set_timed_mood("angry", 15)
+                        
             elif moglin.upside_down():
-                if upside_down_since == 0:
-                    upside_down_since = time.monotonic()
-                    set_timed_mood("scared", 2)
-                elif time.monotonic() - upside_down_since >= 10:
-                    set_timed_mood("dead", 15)
+                inactivity_timer.start()
+                if not upside_down_timer.active():
+                    upside_down_timer.start()
+                    mood = "scared"
+                elif upside_down_timer.expired():
+                    mood = "dead"
+                    
+            elif inactivity_timer.expired():
+                mood = "sleeping"
+                
             else:
-                upside_down_since = 0
-                if mood_expires and time.monotonic() >= mood_expires:
+                upside_down_timer.reset()
+                if mood_timer.expired():
                     mood = default_mood
-                    mood_expires = 0
+                    mood_timer.reset()
 
             if mood != old_mood:
                 post_mood(mood)

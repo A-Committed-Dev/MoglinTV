@@ -2,7 +2,7 @@ services:
   hardware:
     build: ./hardware
     privileged: true
-    restart: no
+    restart: unless-stopped
     depends_on:
       - faces
     volumes:

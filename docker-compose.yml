@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     depends_on:
       - faces
+    ports:
+      - "8080:8080"
     volumes:
       - "/dev:/dev"
       - "/sys:/sys"

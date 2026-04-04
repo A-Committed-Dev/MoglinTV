@@ -30,7 +30,37 @@ Prerequisites:
 from moglin import Moglin
 from utility import Timer
 import requests
-import time
+import json
+import queue
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+command_queue = queue.Queue()
+
+
+class CommandHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        length = int(self.headers.get("Content-Length", 0))
+        data = json.loads(self.rfile.read(length)) if length else {}
+        command_queue.put(data)
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(json.dumps({"status": "ok"}).encode())
+
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(json.dumps({"status": "running"}).encode())
+
+    def log_message(self, format, *args):
+        pass  # Suppress request logs
+
+
+def start_command_server(port=8080):
+    server = HTTPServer(("0.0.0.0", port), CommandHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    print(f"Command server listening on port {port}")
 
 
 def post_mood(mood: str) -> None:
@@ -41,6 +71,7 @@ def post_mood(mood: str) -> None:
 
 def main() -> None:
     print("Hardware controller started.")
+    start_command_server()
     moglin = Moglin()
     default_mood = "happy"
     mood = default_mood
@@ -59,6 +90,12 @@ def main() -> None:
 
     try:
         while True:
+            while not command_queue.empty():
+                cmd = command_queue.get_nowait()
+                if "interact" in cmd:
+                    inactivity_timer.start()
+            
+
             match mood:
                 case "happy":
                     if wiggle_timer.expired() or not wiggle_timer.active():

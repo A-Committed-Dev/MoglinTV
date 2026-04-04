@@ -1,3 +1,5 @@
+import time
+
 class Timer:
     def __init__(self, duration: float = 0):
         self._deadline = 0.0

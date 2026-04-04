@@ -79,7 +79,7 @@ def main() -> None:
     mood_timer = Timer()
     upside_down_timer = Timer(10)
     wiggle_timer = Timer(30)
-    inactivity_timer = Timer(30 * 60)
+    inactivity_timer = Timer(50)
     inactivity_timer.start()
     post_mood(mood)
 
@@ -90,11 +90,53 @@ def main() -> None:
 
     try:
         while True:
+            old_mood = mood
+            
             while not command_queue.empty():
                 cmd = command_queue.get_nowait()
                 if "interact" in cmd:
                     inactivity_timer.start()
+                    if mood == "sleeping":
+                        mood = default_mood
+                elif "sad" in cmd:
+                    inactivity_timer.start()
+                    set_timed_mood("sad", 20)
+                elif "confused" in cmd:
+                    inactivity_timer.start()
+                    set_timed_mood("confused", 20)
             
+            if moglin.shaken(threshold=0.6):
+                inactivity_timer.start()
+                if mood not in {"angry", "dizzy"}:
+                    shake_count += 1
+                    if shake_count >= 2:
+                        set_timed_mood("dizzy", 15)
+                        shake_count = 0
+                    else:
+                        set_timed_mood("angry", 15)
+                        
+            elif moglin.upside_down():
+                inactivity_timer.start()
+                if mood == "dead":
+                    pass  # Already dead, stay dead
+                elif upside_down_timer.expired():
+                    set_timed_mood("dead", 20)
+                elif not upside_down_timer.active():
+                    upside_down_timer.start()
+                elif upside_down_timer.active():
+                    set_timed_mood("scared", 2)
+                    
+            elif inactivity_timer.expired():
+                mood = "sleeping"
+                
+            else:
+                upside_down_timer.reset()
+                if mood_timer.expired():
+                    mood = default_mood
+                    mood_timer.reset()
+
+            if mood != old_mood:
+                post_mood(mood)
 
             match mood:
                 case "happy":
@@ -117,38 +159,6 @@ def main() -> None:
                     moglin.neutral()
                 case "sleeping":
                     moglin.neutral()
-            
-            old_mood = mood
-            
-            if moglin.shaken(threshold=0.6):
-                inactivity_timer.start()
-                if mood not in {"angry", "dizzy"}:
-                    shake_count += 1
-                    if shake_count >= 2:
-                        set_timed_mood("dizzy", 15)
-                        shake_count = 0
-                    else:
-                        set_timed_mood("angry", 15)
-                        
-            elif moglin.upside_down():
-                inactivity_timer.start()
-                if not upside_down_timer.active():
-                    upside_down_timer.start()
-                    mood = "scared"
-                elif upside_down_timer.expired():
-                    mood = "dead"
-                    
-            elif inactivity_timer.expired():
-                mood = "sleeping"
-                
-            else:
-                upside_down_timer.reset()
-                if mood_timer.expired():
-                    mood = default_mood
-                    mood_timer.reset()
-
-            if mood != old_mood:
-                post_mood(mood)
     finally:
         moglin.neutral()  # Ensure tail returns to neutral on exit
         

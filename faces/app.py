@@ -3,8 +3,10 @@ import os
 import queue
 import threading
 import requests as http_client
+from charpageProxy import charpage
 
 app = Flask(__name__)
+app.register_blueprint(charpage)
 
 VALID_MOODS = {"angry", "confused", "dead", "dizzy", "happy", "sad", "scared", "sleeping"}
 current_mood = "happy"

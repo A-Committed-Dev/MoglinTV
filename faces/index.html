@@ -52,9 +52,17 @@
             transition: opacity 0.25s ease;
         }
 
+        #popup a, #popup a:visited, #popup a:active, #popup a:hover {
+            text-decoration: none;
+            color: inherit;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
         #popup.show {
             display: block;
-            opacity: 1
+            opacity: 1;
+            pointer-events: auto;
         }
 
         #popup.hide {
@@ -66,8 +74,8 @@
 <body>
     <iframe id="f" src="/face"></iframe>
     <div id="overlay"></div>
-    <div id="popup"><img src="/assets/charpage.png" alt="Charpage"
-            style="max-width:200px;display:block;margin:0 auto 16px"><span>Charpage</span></div>
+    <div id="popup"><a href="/charpage"><img src="/assets/charpage.png" alt="Charpage"
+            style="max-width:200px;display:block;margin:0 auto 16px"><span>Charpage</span></a></div>
     <script>
         let currentMood = "happy";
         const es = new EventSource("/events");

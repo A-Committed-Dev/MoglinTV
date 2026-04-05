@@ -39,6 +39,19 @@ all "neatly" solder to a prototype board. and put inside a nice 3D printed mogli
 
 image of guts
 
+# Interactions of the silly desktop moglin
+MoglinTv has many diffrent interactions, for starters when you first meet him he will propably be sleeping (he's very lazy) 
+
+image of sleeping
+
+But you can tap to wake him up which in turn will make him very happy to see you and orcasionally he will wiggle his tail for you, hes also very sympatheic so if you accidently did croake in game, he would mourne you for some time, but youd propably see that if you contuiune to corake alot consecutively, he might not be so sympathetic and if you then where to get youre frustrations out on him by shakeing him he might not be so happy with that, and if you for some reason feel that you wanted to turn him upside down rember he has a very weak brain stem so dont do it for too long... 
+
+If you get tired of looking at his face and would rather look at something prettier like youreself. tap the screen and click on charpage icon, and do the tsame to return to your sqaure friend.
+
+image of char page on moglin
+
+For all of the features go see my submission for the Everything goes contest!
+
 # My submission to the Everything goes contest!
 
 

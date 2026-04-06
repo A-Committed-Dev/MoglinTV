@@ -90,7 +90,7 @@ For all of the features, go see my submission for the Everything Goes contest!
 
 # My submission to the Everything goes contest!
 
-will come here soon!
+[My submission is here!!!!](https://youtu.be/8pYrM4E_kSU?si=QZBNYoS41SeAW6Rq)
 
 # Tribute to the awesome team at artix entertianment 
 
